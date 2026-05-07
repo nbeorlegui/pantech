@@ -1,1 +1,19 @@
 @import "tailwindcss";
+.demo-scroll {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(252, 185, 0, 0.9) rgba(255, 255, 255, 0.12);
+}
+
+.demo-scroll::-webkit-scrollbar {
+  width: 8px;
+}
+
+.demo-scroll::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.12);
+  border-radius: 999px;
+}
+
+.demo-scroll::-webkit-scrollbar-thumb {
+  background: rgba(252, 185, 0, 0.9);
+  border-radius: 999px;
+}

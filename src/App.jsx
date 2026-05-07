@@ -1,6 +1,52 @@
 import React, { useEffect, useRef, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { ArrowRight, BarChart3, Bot, Code2, Sparkles } from "lucide-react";
+import { ArrowRight, BarChart3, Bot, Code2, FileText, Rocket, ShoppingBag, Sparkles, Workflow } from "lucide-react";
+
+
+const demoGroups = [
+  {
+    category: "Sitios y tiendas online",
+    icon: Rocket,
+    examples: [
+      {
+        title: "Landing premium animada",
+        text: "Sitio one page con hero visual, scroll effects, secciones comerciales y formulario de contacto.",
+      },
+      {
+        title: "Tienda catálogo + carrito",
+        text: "Demo de productos, categorías, carrito, checkout simulado y panel simple de administración.",
+      },
+    ],
+  },
+  {
+    category: "Dashboards y análisis de datos",
+    icon: BarChart3,
+    examples: [
+      {
+        title: "Dashboard Meta Ads",
+        text: "Tablero multi-cliente para cargar campañas, analizar inversión, resultados, CTR y costo por resultado.",
+      },
+      {
+        title: "Reporte ejecutivo mensual",
+        text: "Informe visual con resumen de indicadores, evolución, hallazgos y próximos pasos recomendados.",
+      },
+    ],
+  },
+  {
+    category: "Automatizaciones y bots",
+    icon: Workflow,
+    examples: [
+      {
+        title: "Bot WhatsApp para turnos",
+        text: "Flujo conversacional para pedir datos, validar disponibilidad y derivar o confirmar la solicitud.",
+      },
+      {
+        title: "Automatización de agenda + recetas",
+        text: "Sistema para solicitar recetas por WhatsApp, completar datos y organizar envíos para aprobación médica.",
+      },
+    ],
+  },
+];
 
 const slides = [
   {
@@ -43,6 +89,20 @@ const slides = [
     cardText: "Unificamos datos dispersos en tableros simples de leer, con métricas clave para ventas, campañas, rendimiento operativo y seguimiento de objetivos.",
   },
   {
+    id: "demos",
+    image: null,
+    nav: "Demos",
+    eyebrow: "Demos interactivas",
+    title: "Probá ejemplos reales antes de contratar.",
+    text: "Una sección para mostrar apps demo de Pantech agrupadas por tipo de solución: sitios y tiendas online, dashboards y análisis de datos, automatizaciones y bots.",
+    icon: Rocket,
+    number: "04",
+    chips: ["12 demos", "Apps web", "Bots", "Dashboards"],
+    cardTitle: "Biblioteca de demos Pantech",
+    cardText: "Cada demo puede tener su propio link, descripción, tecnologías usadas y botón para solicitar una versión personalizada.",
+    isDemos: true,
+  },
+  {
     id: "contacto",
     image: null,
     nav: "Contacto",
@@ -50,7 +110,7 @@ const slides = [
     title: "¿Listo para impulsar tu negocio?",
     text: "Hablemos sobre tu proyecto y veamos cómo podemos ayudarte con desarrollo web, IA, automatizaciones o análisis de datos.",
     icon: Sparkles,
-    number: "04",
+    number: "05",
     chips: ["WhatsApp", "Email", "Propuesta", "Pantech"],
     cardTitle: "Hablemos de tu proyecto",
     cardText: "Contanos qué necesitás mejorar y te ayudamos a convertirlo en una solución digital concreta, escalable y fácil de usar.",
@@ -241,7 +301,7 @@ function Header({ activeIndex, setActiveIndex }) {
           <img src="/logo.png" alt="Pantech" className="h-8 w-auto sm:h-10" />
         </button>
 
-        <nav className="rounded-full border border-white/20 bg-white/10 px-1.5 py-1.5 shadow-2xl backdrop-blur-xl sm:px-2 sm:py-2">
+        <nav className="max-w-[64vw] overflow-x-auto rounded-full border border-white/20 bg-white/10 px-1.5 py-1.5 shadow-2xl backdrop-blur-xl sm:max-w-none sm:px-2 sm:py-2">
           {slides.map((slide, index) => (
             <button
               key={slide.id}
@@ -255,7 +315,7 @@ function Header({ activeIndex, setActiveIndex }) {
           ))}
         </nav>
 
-        <button className="hidden rounded-full border border-white/20 bg-white/10 px-5 py-3 font-bold backdrop-blur-xl transition hover:bg-white hover:text-[#0055B3] md:inline-flex">
+        <button onClick={() => setActiveIndex(slides.length - 1)} className="hidden rounded-full border border-white/20 bg-white/10 px-5 py-3 font-bold backdrop-blur-xl transition hover:bg-white hover:text-[#0055B3] md:inline-flex">
           Contacto <ArrowRight className="ml-2 h-4 w-4" />
         </button>
       </div>
@@ -308,10 +368,159 @@ function MobileGlassCard({ slide, activeIndex, setActiveIndex }) {
   );
 }
 
-function SlideContent({ slide, activeIndex, setActiveIndex }) {
+
+function DemosGrid({ className = "" }) {
+  return (
+    <motion.div
+      key="demos-grid"
+      data-demo-scroll="true"
+      initial={{ opacity: 0, y: 22, filter: "blur(10px)" }}
+      animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+      exit={{ opacity: 0, y: -20, filter: "blur(10px)" }}
+      transition={{ duration: 0.5, ease: "easeOut" }}
+      className={`demo-scroll relative flex flex-col gap-4 overflow-y-auto overscroll-contain pr-2 ${className}`.trim()}
+    >
+      {demoGroups.map((group) => {
+        const Icon = group.icon;
+        return (
+          <article key={group.category} className="rounded-[1.5rem] border border-cyan-200/20 bg-[#002B6E]/34 p-4 shadow-2xl shadow-cyan-950/25 backdrop-blur-md xl:p-5">
+            <div className="mb-4 flex items-center gap-3 border-b border-white/10 pb-4">
+              <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-white/10 text-[#FCB900] ring-1 ring-white/20">
+                <Icon className="h-5 w-5" />
+              </div>
+              <h3 className="text-[0.9rem] font-black uppercase tracking-[0.18em] text-cyan-50 md:text-[1rem] xl:text-[1.02rem]">{group.category}</h3>
+            </div>
+
+            <div className="grid gap-3 md:grid-cols-2 xl:gap-4">
+              {group.examples.map((demo) => (
+                <div key={demo.title} className="rounded-2xl border border-white/12 bg-white/10 p-4">
+                  <div className="flex items-start justify-between gap-3">
+                    <h4 className="text-[1rem] font-black leading-tight text-white xl:text-[1.08rem]">{demo.title}</h4>
+                    <span className="shrink-0 rounded-full bg-[#FCB900] px-2.5 py-1 text-[0.58rem] font-black uppercase tracking-[0.12em] text-slate-950">Demo</span>
+                  </div>
+                  <p className="mt-2 text-[0.83rem] leading-6 text-blue-50/78 xl:text-[0.88rem]">{demo.text}</p>
+                  <button className="mt-4 inline-flex items-center rounded-full border border-white/15 bg-white/10 px-3.5 py-2.5 text-xs font-black text-white transition hover:bg-white hover:text-[#0055B3]">
+                    Ver demo <ArrowRight className="ml-1.5 h-3.5 w-3.5" />
+                  </button>
+                </div>
+              ))}
+            </div>
+          </article>
+        );
+      })}
+    </motion.div>
+  );
+}
+
+function DemosPage({ onClose }) {
+  return (
+    <div className="fixed inset-0 z-[140] overflow-hidden bg-[#001B45]/86 text-white backdrop-blur-md">
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_20%,rgba(0,174,239,.28),transparent_28%),radial-gradient(circle_at_80%_30%,rgba(252,185,0,.12),transparent_22%),radial-gradient(circle_at_50%_85%,rgba(124,58,237,.2),transparent_30%),linear-gradient(135deg,#001B45_0%,#003C89_46%,#00122F_100%)]" />
+      <div className="relative flex h-full flex-col px-4 pb-6 pt-5 sm:px-6 md:px-10 lg:px-16">
+        <div className="mb-5 flex flex-col gap-4 border-b border-white/10 pb-5 md:flex-row md:items-center md:justify-between">
+          <div className="max-w-3xl">
+            <p className="mb-2 text-[0.72rem] font-black uppercase tracking-[0.34em] text-[#FCB900] sm:text-xs sm:tracking-[0.42em]">Catálogo de demos</p>
+            <h2 className="text-[2rem] font-black leading-[0.95] tracking-tight sm:text-4xl md:text-[3rem]">Explorá nuestras demos en una pantalla dedicada.</h2>
+            <p className="mt-3 max-w-2xl text-sm leading-6 text-blue-50/80 sm:text-base">Acá podés mostrar tus ejemplos de forma más limpia, sin mezclar el scroll de los demos con la navegación principal del sitio.</p>
+          </div>
+
+          <button
+            onClick={onClose}
+            className="inline-flex items-center justify-center rounded-full border border-white/20 bg-white/10 px-5 py-3 text-sm font-black text-white backdrop-blur transition hover:bg-white hover:text-[#0055B3]"
+          >
+            Volver al inicio <ArrowRight className="ml-2 h-4 w-4" />
+          </button>
+        </div>
+
+        <div className="min-h-0 flex-1">
+          <DemosGrid className="h-full" />
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function SlideContent({ slide, activeIndex, setActiveIndex, openDemosPage }) {
   const Icon = slide.icon;
   const whatsappUrl = "https://wa.me/5492612434819?text=Hola%20Pantech%2C%20quiero%20consultar%20por%20un%20proyecto";
   const emailUrl = "mailto:info@pantech.com.ar?subject=Consulta%20desde%20el%20sitio%20web%20Pantech";
+
+  if (slide.isDemos) {
+    return (
+      <section className="relative z-20 flex h-screen items-center overflow-hidden px-4 pb-5 pt-20 text-white sm:px-5 md:px-10 lg:px-20 lg:pt-20">
+        <div className="mx-auto grid w-full max-w-7xl items-center gap-8 lg:grid-cols-[1fr_0.5fr]">
+          <AnimatePresence mode="wait">
+            <motion.div
+              key={`demos-text-${slide.id}`}
+              initial={{ opacity: 0, x: -35, filter: "blur(12px)" }}
+              animate={{ opacity: 1, x: 0, filter: "blur(0px)" }}
+              exit={{ opacity: 0, x: 35, filter: "blur(12px)" }}
+              transition={{ duration: 0.52, ease: "easeOut" }}
+              className="max-w-3xl"
+            >
+              <p className="mb-3 text-[0.68rem] font-black uppercase tracking-[0.34em] text-[#FCB900] sm:text-xs sm:tracking-[0.42em]">{slide.eyebrow}</p>
+              <h1 className="text-[2.55rem] font-black leading-[0.94] tracking-tight min-[390px]:text-[2.85rem] sm:text-5xl md:text-[3.8rem] lg:text-[4rem] xl:text-[4.25rem]">
+                {slide.title}
+              </h1>
+              <p className="mt-4 max-w-2xl text-[0.95rem] leading-6 text-blue-50/82 sm:text-base md:text-[1.05rem] md:leading-7">{slide.text}</p>
+
+              <div className="mt-7 flex flex-col gap-3 sm:flex-row">
+                <button
+                  onClick={openDemosPage}
+                  className="rounded-full bg-[#FCB900] px-6 py-3 font-black text-slate-950 shadow-xl shadow-yellow-500/25 transition hover:-translate-y-1"
+                >
+                  Ver demos en pantalla completa <ArrowRight className="ml-2 inline h-4 w-4" />
+                </button>
+                <button
+                  onClick={() => setActiveIndex(slides.length - 1)}
+                  className="rounded-full border border-white/20 bg-white/10 px-6 py-3 font-black text-white backdrop-blur transition hover:-translate-y-1 hover:bg-white hover:text-[#0055B3]"
+                >
+                  Ir a contacto
+                </button>
+              </div>
+            </motion.div>
+          </AnimatePresence>
+
+          <AnimatePresence mode="wait">
+            <motion.div
+              key={`demos-card-${slide.id}`}
+              initial={{ opacity: 0, x: 60, rotateY: -8, filter: "blur(14px)" }}
+              animate={{ opacity: 1, x: 0, rotateY: 0, filter: "blur(0px)" }}
+              exit={{ opacity: 0, x: -60, rotateY: 8, filter: "blur(14px)" }}
+              transition={{ duration: 0.6, ease: "easeOut" }}
+              className="relative hidden lg:block lg:justify-self-end"
+            >
+              <div className="relative max-w-[420px] overflow-hidden rounded-[1.75rem] border border-cyan-200/25 bg-[#002B6E]/28 p-5 shadow-2xl shadow-cyan-950/30 backdrop-blur-md xl:p-6">
+                <div className="absolute -right-24 -top-24 h-64 w-64 rounded-full bg-cyan-300/15 blur-3xl" />
+                <div className="absolute -bottom-24 -left-24 h-64 w-64 rounded-full bg-[#FCB900]/12 blur-3xl" />
+                <div className="relative">
+                  <div className="mb-4 flex items-center gap-3">
+                    <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-white/10 text-[#FCB900] ring-1 ring-white/20">
+                      <Rocket className="h-5 w-5" />
+                    </div>
+                    <p className="text-[0.7rem] font-black uppercase tracking-[0.3em] text-cyan-50">Conocé nuestras demos</p>
+                  </div>
+                  <h2 className="text-[1.7rem] font-black leading-tight xl:text-[1.9rem]">Explorá ejemplos reales de soluciones digitales.</h2>
+                  <p className="mt-3 text-[0.9rem] leading-6 text-blue-50/78">Vas a poder ver referencias de proyectos que desarrollamos y descubrir qué tipo de solución se adapta mejor a tu negocio.</p>
+                  <div className="mt-5 space-y-2.5">
+                    <div className="rounded-2xl border border-white/12 bg-white/10 px-4 py-3">
+                      <p className="text-sm font-black text-white">Sitios y tiendas online</p>
+                    </div>
+                    <div className="rounded-2xl border border-white/12 bg-white/10 px-4 py-3">
+                      <p className="text-sm font-black text-white">Dashboards y análisis de datos</p>
+                    </div>
+                    <div className="rounded-2xl border border-white/12 bg-white/10 px-4 py-3">
+                      <p className="text-sm font-black text-white">Automatizaciones y bots</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </motion.div>
+          </AnimatePresence>
+        </div>
+      </section>
+    );
+  }
 
   return (
     <section className={`relative z-20 flex h-screen items-center overflow-hidden px-4 pb-5 pt-20 text-white sm:px-5 md:px-10 lg:px-20 lg:pt-20 ${slide.isContact ? "justify-center text-center" : ""}`}>
@@ -436,11 +645,12 @@ function ScrollHint() {
 
 export default function App() {
   const [activeIndex, setActiveIndex] = useState(0);
+  const [isDemosPageOpen, setIsDemosPageOpen] = useState(false);
   const lockRef = useRef(false);
   const touchStartY = useRef(null);
 
   const goTo = (nextIndex) => {
-    if (lockRef.current) return;
+    if (lockRef.current || isDemosPageOpen) return;
     if (nextIndex < 0 || nextIndex >= slides.length) return;
     lockRef.current = true;
     setActiveIndex(nextIndex);
@@ -451,21 +661,36 @@ export default function App() {
 
   useEffect(() => {
     const onWheel = (e) => {
+      if (isDemosPageOpen) return;
       if (Math.abs(e.deltaY) < 20) return;
+
+      const demoScroller = e.target?.closest?.('[data-demo-scroll="true"]');
+      if (demoScroller) {
+        const canScrollDown = demoScroller.scrollTop + demoScroller.clientHeight < demoScroller.scrollHeight - 2;
+        const canScrollUp = demoScroller.scrollTop > 2;
+
+        if ((e.deltaY > 0 && canScrollDown) || (e.deltaY < 0 && canScrollUp)) {
+          return;
+        }
+      }
+
       if (e.deltaY > 0) goTo(activeIndex + 1);
       if (e.deltaY < 0) goTo(activeIndex - 1);
     };
 
     const onKeyDown = (e) => {
+      if (isDemosPageOpen) return;
       if (e.key === "ArrowDown" || e.key === "PageDown") goTo(activeIndex + 1);
       if (e.key === "ArrowUp" || e.key === "PageUp") goTo(activeIndex - 1);
     };
 
     const onTouchStart = (e) => {
+      if (isDemosPageOpen) return;
       touchStartY.current = e.touches[0].clientY;
     };
 
     const onTouchEnd = (e) => {
+      if (isDemosPageOpen) return;
       if (touchStartY.current === null) return;
       const endY = e.changedTouches[0].clientY;
       const delta = touchStartY.current - endY;
@@ -487,7 +712,7 @@ export default function App() {
       window.removeEventListener("touchstart", onTouchStart);
       window.removeEventListener("touchend", onTouchEnd);
     };
-  }, [activeIndex]);
+  }, [activeIndex, isDemosPageOpen]);
 
   const activeSlide = slides[activeIndex];
 
@@ -496,9 +721,15 @@ export default function App() {
       <BackgroundImage slide={activeSlide} />
       <InteractiveParticleLayer />
       <Header activeIndex={activeIndex} setActiveIndex={setActiveIndex} />
-      <SlideContent slide={activeSlide} activeIndex={activeIndex} setActiveIndex={setActiveIndex} />
-      <Pagination activeIndex={activeIndex} setActiveIndex={setActiveIndex} />
-      <ScrollHint />
+      <SlideContent
+        slide={activeSlide}
+        activeIndex={activeIndex}
+        setActiveIndex={setActiveIndex}
+        openDemosPage={() => setIsDemosPageOpen(true)}
+      />
+      {!isDemosPageOpen && <Pagination activeIndex={activeIndex} setActiveIndex={setActiveIndex} />}
+      {!isDemosPageOpen && !activeSlide.isDemos && !activeSlide.isContact && <ScrollHint />}
+      {isDemosPageOpen && <DemosPage onClose={() => setIsDemosPageOpen(false)} />}
     </main>
   );
 }
